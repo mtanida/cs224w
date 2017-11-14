@@ -21,7 +21,6 @@ class Taxi:
             for line in lines:
                 xs = line.strip().split(',')
                 self.id = int(xs[0])
-
                 date_str, time_str = xs[1].split()
                 year, month, day = [int(x) for x in date_str.split('-')]
                 hour, min, sec = [int(x) for x in time_str.split(':')]
@@ -46,7 +45,9 @@ def load_taxis(dir_path, max_num_taxis=None):
             name, ext = os.path.splitext(fname)
             if os.path.isfile(file_path) and '.txt':
                 try:
-                    taxi_ids.append(int(name))
+                    stat = os.stat(file_path)
+                    if stat.st_size:
+                        taxi_ids.append(int(name))
                 except:
                     pass
         taxi_ids.sort()
@@ -58,4 +59,5 @@ def load_taxis(dir_path, max_num_taxis=None):
             taxis.append(Taxi(file_path))
             if 0 == len(taxis) %  1000:
                 print('  ' + str(len(taxis)))
+        print('Done.')
     return taxis
